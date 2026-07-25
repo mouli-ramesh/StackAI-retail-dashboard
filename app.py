@@ -2,6 +2,8 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 
+st.write("XSRF Protection is currently:", st.get_option("server.enableXsrfProtection"))
+
 # --- PAGE CONFIG ---
 st.set_page_config(page_title="Retail Sales Intelligence", layout="wide")
 

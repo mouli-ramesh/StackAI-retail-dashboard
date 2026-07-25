@@ -18,8 +18,26 @@ st.title("📊 Retail Sales Intelligence App")
 
 # --- SIDEBAR: DATA INTEGRATION ---
 st.sidebar.header("Data Integration")
-sales_file = st.sidebar.file_uploader("Upload retail_weekly_sales.xlsx", type=['xlsx'])
-master_file = st.sidebar.file_uploader("Upload store_master.xlsx", type=['xlsx'])
+sales_file = st.sidebar.file_uploader("Upload Weekly Sales", type=['xlsx'])
+stores_file = st.sidebar.file_uploader("Upload Store Master", type=['xlsx'])
+
+# Add a fallback for the network error
+use_default = st.sidebar.checkbox("Use default data (Check this if upload fails with AxiosError)")
+
+if use_default:
+    # Read the files directly from the GitHub repository
+    sales_df = pd.read_excel("data/retail_weekly_sales.xlsx")
+    stores_df = pd.read_excel("data/store_master.xlsx")
+    st.success("Default data loaded successfully!")
+    
+elif sales_file and stores_file:
+    # Read the uploaded files
+    sales_df = pd.read_excel(sales_file)
+    stores_df = pd.read_excel(stores_file)
+    st.success("Files uploaded successfully!")
+else:
+    st.warning("Please upload data or check the 'Use default data' box to proceed.")
+    st.stop() # Stops the rest of the app from crashing while waiting for data
 
 @st.cache_data
 def load_and_process_data(s_file, m_file):
